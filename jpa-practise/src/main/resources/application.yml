@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/cloudstudy?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&useSSL=true
+    username: root
+    password: root
+  jpa:
+    show-sql: true #是否打印SQL语句，默认false
+    hibernate:
+      ddl-auto: create #自动更新数据库表结构，默认none，可选值none、create、create-drop、validate、update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy #数据库表和字段的命名策略，默认org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect #数据库方言，默认org.hibernate.dialect.MySQL5Dialect
