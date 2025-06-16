@@ -18,6 +18,7 @@
 
     <modules>
         <module>jpa-practise</module>
+        <module>design-pattern-practise</module>
     </modules>
 
     <properties>
