@@ -19,6 +19,7 @@
     <modules>
         <module>jpa-practise</module>
         <module>design-pattern-practise</module>
+        <module>lambda-practise</module>
     </modules>
 
     <properties>
@@ -26,7 +27,13 @@
     </properties>
 
     <dependencyManagement>
-
+        <dependencies>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>5.8.25</version>
+            </dependency>
+        </dependencies>
     </dependencyManagement>
 
     <build>
