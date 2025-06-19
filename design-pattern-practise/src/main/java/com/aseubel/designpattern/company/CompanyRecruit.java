@@ -1,5 +1,7 @@
-package com.aseubel.lambda.company;
+package com.aseubel.designpattern.company;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -8,7 +10,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-import static com.aseubel.lambda.company.CompanyRecruit.Status.*;
+import static com.aseubel.designpattern.company.CompanyRecruit.Status.*;
 
 /**
  * @author Aseubel
@@ -77,10 +79,8 @@ public class CompanyRecruit {
         if (status == NEW_START) {
             synchronized (this) {
                 this.status = WAITING_FOR_RESUME;
-                if (status == WAITING_FOR_RESUME) {
-                    log.info("线程 {} 修改了面试官", Thread.currentThread().getName());
-                    this.consumer = consumer;
-                }
+                log.info("线程 {} 修改了面试官", Thread.currentThread().getName());
+                this.consumer = consumer;
             }
         } else {
             throw new IllegalStateException("当前状态不可修改面试官！");
@@ -94,7 +94,7 @@ public class CompanyRecruit {
                     AbstractDeveloper developer = candidates.take();
                     log.info("开始面试 {}", developer.getName());
                     // sleep随机时间模拟面试时间
-                    Thread.sleep((long) (Math.random() * 5000));
+                    Thread.sleep((long) (Math.random() * 3000));
                     consumer.accept(developer);
                     log.info("{} 面试结束", developer.getName());
                 } while (!shouldStopConsume());
@@ -106,14 +106,14 @@ public class CompanyRecruit {
     }
 
     public boolean receiveResume(AbstractDeveloper developer) {
-        if (developer == null || !canGetResume()) {
+        if (ObjectUtil.isEmpty(developer) || !canGetResume()) {
             return false;
         }
         if (resumes.offer(developer)) {
             resumeSize.incrementAndGet();
             boolean added = addToCandidates(developer);
             log.info("简历接收：{}，符合条件：{}", developer.getName(), added);
-            return addToCandidates(developer);
+            return added;
         }
         return false;
     }
@@ -156,8 +156,10 @@ public class CompanyRecruit {
     }
 
     public String recruitOverView() {
-        return "招聘名称：" + name + "  招聘职位：" + position.getDisplayName()
-                + "  收到简历数量：" + resumeSize.get() + "  进入面试者数量：" + candidateSize.get()
+        return "招聘名称：" + (StrUtil.isNotEmpty(name)?name:"未设置")
+                + "  招聘职位：" + (ObjectUtil.isNotEmpty(position)?position.getDisplayName():"未设置")
+                + "  收到简历数量：" + resumeSize.get()
+                + "  进入面试者数量：" + candidateSize.get()
                 + "  招聘状态：" + status.name();
     }
 

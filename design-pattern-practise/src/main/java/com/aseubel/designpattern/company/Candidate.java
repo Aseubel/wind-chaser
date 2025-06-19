@@ -1,4 +1,4 @@
-package com.aseubel.lambda.company;
+package com.aseubel.designpattern.company;
 
 /**
  * @author Aseubel
