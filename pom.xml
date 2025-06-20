@@ -20,6 +20,8 @@
         <module>jpa-practise</module>
         <module>design-pattern-practise</module>
         <module>lambda-practise</module>
+        <module>algorithm-practise</module>
+        <module>mq-practise</module>
     </modules>
 
     <properties>
