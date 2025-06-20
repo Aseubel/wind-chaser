@@ -46,6 +46,10 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
