@@ -72,4 +72,18 @@ public class LRUCache implements Cache{
         node.prev.next = node.next;
         node.next.prev = node.prev;
     }
+
+    public class Node {
+        int key;
+        int value;
+        Node prev;
+        Node next;
+        public Node() { }
+        public Node(int key, int value) {
+            this.key = key;
+            this.value = value;
+            this.prev = null;
+            this.next = null;
+        }
+    }
 }

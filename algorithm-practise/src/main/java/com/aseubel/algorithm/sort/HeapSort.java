@@ -14,9 +14,11 @@ public class HeapSort implements Sort{
 
     @Override
     public int[] sort(int[] arr) {
+        // 实现堆排序算法，首先构建最大堆
         int n = arr.length;
         for (int i = n / 2 - 1; i >= 0; i--)
             heapify(arr, n, i);
+        // 将堆顶元素（最大值）与末尾元素交换，并重新调整堆
         for (int i = n - 1; i >= 0; i--) {
             int temp = arr[0];
             arr[0] = arr[i];
@@ -27,6 +29,7 @@ public class HeapSort implements Sort{
     }
 
     private void heapify(int[] arr, int n, int i) {
+        // 调整以i为根的子树，使其成为最大堆
         int largest = i;
         int l = 2 * i + 1;
         int r = 2 * i + 2;
@@ -38,6 +41,7 @@ public class HeapSort implements Sort{
             int swap = arr[i];
             arr[i] = arr[largest];
             arr[largest] = swap;
+            // 递归调整受影响的子树
             heapify(arr, n, largest);
         }
     }
