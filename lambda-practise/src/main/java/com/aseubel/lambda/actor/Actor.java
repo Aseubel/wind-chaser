@@ -1,4 +1,4 @@
-package com.aseubel.lambda;
+package com.aseubel.lambda.actor;
 
 /**
  * @author Aseubel
