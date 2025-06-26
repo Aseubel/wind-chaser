@@ -65,7 +65,7 @@
   - [ ] 分布式
     - [x] 一致性哈希算法
     - [x] Paxos算法
-    - [ ] Raft算法
+    - [x] Raft算法
     - [ ] ZAB算法
     - [ ] Snowflake算法
 
