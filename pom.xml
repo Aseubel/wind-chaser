@@ -23,6 +23,7 @@
         <module>algorithm-practise</module>
         <module>mq-practise</module>
         <module>concurrent-practise</module>
+        <module>collection-practise</module>
     </modules>
 
     <properties>
