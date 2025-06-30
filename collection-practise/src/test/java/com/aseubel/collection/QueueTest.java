@@ -1,5 +1,6 @@
 package com.aseubel.collection;
 
+import com.aseubel.collection.queue.CircleQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -100,6 +101,25 @@ public class QueueTest {
         producer.start();
         consumer.join();
         producer.join();
+    }
+
+    @Test
+    public void myCircleQueueTest() {
+        CircleQueue<Integer> queue = new CircleQueue<>(3);
+        queue.dequeue();
+        queue.enqueue(1);
+        queue.enqueue(2);
+        queue.enqueue(3);
+        queue.enqueue(4);
+        System.out.println(queue.dequeue());
+        System.out.println(queue.dequeue());
+        System.out.println(queue.dequeue());
+        System.out.println(queue.dequeue());
+        queue.enqueue(1);
+        queue.enqueue(2);
+        queue.enqueue(3);
+        queue.enqueue(4);
+
     }
 
     private void genElements(Queue<Integer> queue) {
