@@ -1,0 +1,9 @@
+spring:
+  data:
+    redis:
+      sentinel:
+        master: mymaster # 指定哨兵的master名称
+        nodes: # 哨兵节点列表
+          - 127.0.0.1:26379
+          - 127.0.0.1:26380
+          - 127.0.0.1:26381

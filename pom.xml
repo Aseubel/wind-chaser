@@ -24,6 +24,7 @@
         <module>mq-practise</module>
         <module>concurrent-practise</module>
         <module>collection-practise</module>
+        <module>redis-practise</module>
     </modules>
 
     <properties>
