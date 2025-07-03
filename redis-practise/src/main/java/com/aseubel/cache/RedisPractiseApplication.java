@@ -1,4 +1,4 @@
-package com.aseubel.redis;
+package com.aseubel.cache;
 
 import io.lettuce.core.ReadFrom;
 import org.springframework.boot.SpringApplication;
