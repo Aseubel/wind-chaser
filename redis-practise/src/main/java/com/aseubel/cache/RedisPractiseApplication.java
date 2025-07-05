@@ -4,6 +4,7 @@ import io.lettuce.core.ReadFrom;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.redis.LettuceClientConfigurationBuilderCustomizer;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Bean;
  * @date 2025/7/2 下午7:32
  */
 @SpringBootApplication
+@EnableCaching
 public class RedisPractiseApplication {
     public static void main(String[] args) {
         SpringApplication.run(RedisPractiseApplication.class, args);

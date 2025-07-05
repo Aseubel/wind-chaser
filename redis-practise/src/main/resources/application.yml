@@ -1,4 +1,8 @@
 spring:
+  cache:
+    type: caffeine # 使用Caffeine作为缓存实现
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=10m # 设置缓存大小和过期时间(s\m\h\d)
   data:
     redis:
 #      sentinel:
