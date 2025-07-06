@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements IOrderService {
 
-    private final FilterChainPipeline<EventFilter<OrderContext>> orderPipeline;
+    private final FilterChainPipeline<EventFilter> orderPipeline;
     // 通过 selectorFactory 依靠配置文件动态生成 selector 选择器
     private final OrderFilterSelectorFactory envBasedFilterSelectorFactory;
     private final PluginRegistry<IOrderModelHandler, OrderModel> pluginRegistry;
