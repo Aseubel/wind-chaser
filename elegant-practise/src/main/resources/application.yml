@@ -18,5 +18,8 @@ filters:
         - UserValidFilter
         - OrderLogSaveFilter
         - UserRiskFilter
+      YW2:
+        - UserValidFilter
+        - OrderLogSaveFilter
 server:
   port: 8080
