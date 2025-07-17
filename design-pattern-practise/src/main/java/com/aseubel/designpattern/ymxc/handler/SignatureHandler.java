@@ -10,9 +10,9 @@ import com.aseubel.designpattern.ymxc.GatewayHandler;
 public class SignatureHandler implements GatewayHandler {
     @Override
     public void process(GatewayContext context) {
-        if (!context.getIsNeedSign()) {
-            System.out.println("不需要签名");
-        }
-        context.setSignMessage(sign(context.getSignPlainContext(), context.getInterfaceInfo().getSignConfig()));
+//        if (!context.getIsNeedSign()) {
+//            System.out.println("不需要签名");
+//        }
+//        context.setSignMessage(sign(context.getSignPlainContext(), context.getInterfaceInfo().getSignConfig()));
     }
 }
