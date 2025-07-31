@@ -8,9 +8,7 @@ import com.aseubel.spring.dto.UploadRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +20,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Aseubel
@@ -31,7 +31,7 @@ import java.nio.file.Paths;
 @Slf4j
 public class UserController {
 
-    private String uploadPath = "D:\\develop\\Java\\javacode\\wind-chaser\\spring-practise\\src\\main\\resources\\static\\";
+    private String uploadPath = "D:\\develop\\Java\\javacode\\wind-chaser\\image\\";
 
     @GetMapping("/user")
     public String getUser() {
@@ -41,17 +41,21 @@ public class UserController {
     @GetMapping(value = "/avatar/{imgName}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getAvatar(@PathVariable String imgName) {
         try {
-            Resource resource = new ClassPathResource("/static/" + imgName);
+            File file = new File(uploadPath + imgName);
             HttpStatus status = HttpStatus.OK;
+            MediaType mediaType = MediaTypeFactory.getMediaType(imgName).orElse(MediaType.IMAGE_JPEG);
             // 判断图片是否存在
-            if (!resource.exists()) {
-                resource = new ClassPathResource("/static/default.jpg");
+            if (!file.exists()) {
                 status = HttpStatus.NOT_FOUND;
+                mediaType = MediaType.IMAGE_JPEG;
             }
             // 读取图片文件
-            InputStream is = resource.getInputStream();
+            InputStream is = FileUtil.getInputStream(file);
             byte[] avatarBytes = StreamUtils.copyToByteArray(is);
-            return new ResponseEntity<>(avatarBytes, status);
+            // 构建响应头，设置Content-Type
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(mediaType);
+            return new ResponseEntity<>(avatarBytes, httpHeaders, status);
         } catch (IOException e) {
             // 使用日志框架记录错误信息
             System.err.println("Error reading avatar file: " + e.getMessage());
