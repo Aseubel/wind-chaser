@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cloudstudy?useSSL=false&serverTimezone=UTC
+    username: root
+    password: root
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
+    listener:
+      simple:
+        prefetch: 1 # 预取消息数量
+    connection-timeout: 1s # 连接超时时间
+    template:
+      retry:
+        enabled: true # 开启重试功能
+        max-attempts: 3 # 最大重试次数
+        initial-interval: 1000ms # 第一次重试的间隔时间
+        multiplier: 2 # 间隔时间乘数
+    publisher-confirm-type: correlated # 开启消息发布确认 simple为同步阻塞 correlated为异步非阻塞
+    publisher-returns: true # 返回失败信息 nack时
+
+# 日志
+logging:
+  level:
+    root: info
+  config: classpath:logback-spring.xml
