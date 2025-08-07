@@ -38,7 +38,7 @@ public class UserController {
         return "user";
     }
 
-    @GetMapping(value = "/avatar/{imgName}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/avatar/{imgName}")
     public ResponseEntity<byte[]> getAvatar(@PathVariable String imgName) {
         try {
             File file = new File(uploadPath + imgName);
