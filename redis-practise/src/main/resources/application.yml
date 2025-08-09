@@ -3,17 +3,37 @@ spring:
     type: caffeine # 使用Caffeine作为缓存实现
     caffeine:
       spec: maximumSize=1000,expireAfterWrite=10m # 设置缓存大小和过期时间(s\m\h\d)
-  data:
     redis:
-#      sentinel:
-#        master: mymaster # 指定哨兵的master名称
-#        nodes: # 哨兵节点列表
-#          - 127.0.0.1:26379
-#          - 127.0.0.1:26380
-#          - 127.0.0.1:26381
-      cluster:
-        max-redirects: # 最大重定向次数
-        nodes: # 集群节点列表
-          - 127.0.0.1:6379
-#          - 127.0.0.1:6380
-#          - 127.0.0.1:6381
+      use-key-prefix: true # 使用key前缀
+      key-prefix: "wind-chaser:" # 设置key前缀
+      cache-null-values: false # 不缓存null值
+      time-to-live: 10m # 设置缓存过期时间(s\m\h\d)
+#  data:
+#    redis:
+##      sentinel:
+##        master: mymaster # 指定哨兵的master名称
+##        nodes: # 哨兵节点列表
+##          - 127.0.0.1:26379
+##          - 127.0.0.1:26380
+##          - 127.0.0.1:26381
+#      cluster:
+#        max-redirects: # 最大重定向次数
+#        nodes: # 集群节点列表
+#          - 127.0.0.1:6379
+##          - 127.0.0.1:6380
+##          - 127.0.0.1:6381
+
+#Redis 配置
+redis:
+  sdk:
+    config:
+      host: 127.0.0.1
+      port: 6379
+      pool-size: 10
+      min-idle-size: 5
+      idle-timeout: 30000
+      connect-timeout: 5000
+      retry-attempts: 3
+      retry-interval: 1000
+      ping-interval: 60000
+      keep-alive: true

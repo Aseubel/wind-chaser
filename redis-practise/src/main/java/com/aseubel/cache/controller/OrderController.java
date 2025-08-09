@@ -1,42 +1,42 @@
 package com.aseubel.cache.controller;
 
-import com.aseubel.cache.entity.User;
-import com.aseubel.cache.service.IUserService;
+import com.aseubel.cache.entity.Order;
+import com.aseubel.cache.service.IOrderService;
 import com.aseubel.cache.util.RedissonDelayQueue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Aseubel
- * @date 2025/7/2 下午7:30
+ * @date 2025/8/9 上午10:00
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/order")
 @RequiredArgsConstructor
-public class TestController {
+public class OrderController {
 
     private final RedissonDelayQueue redissonDelayQueue;
-    private final IUserService userService;
+    private final IOrderService OrderService;
 
     @GetMapping("/get/{key}")
-    public User get(@PathVariable("key") Integer key) {
-        return userService.getUser(key);
+    public Order get(@PathVariable("key") Integer key) {
+        return OrderService.getOrder(key);
     }
 
     @PutMapping("/update")
-    public User update(@RequestBody User user) {
-        return userService.updateUser(user);
+    public Order update(@RequestBody Order Order) {
+        return OrderService.updateOrder(Order);
     }
 
     @DeleteMapping("/delete/{key}")
     public String delete(@PathVariable("key") Integer key) {
-        userService.deleteUser(key);
+        OrderService.deleteOrder(key);
         return "success";
     }
 
     @DeleteMapping("/all/delete")
     public String deleteAll() {
-        userService.deleteAllUsers();
+        OrderService.deleteAllOrders();
         return "success";
     }
 

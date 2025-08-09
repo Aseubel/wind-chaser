@@ -6,13 +6,13 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author Aseubel
- * @date 2025/7/5 下午3:21
+ * @date 2025/8/9 上午9:59
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class User {
-    int id;
-    String name;
-    int age;
+@AllArgsConstructor
+public class Order {
+    private Integer id;
+    private String name;
+    private Double price;
 }
