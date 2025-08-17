@@ -19,10 +19,10 @@ public class Borrow extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "uid", referencedColumnName = "uid", insertable = false, updatable = false)
+    @JoinColumn(name = "uid", referencedColumnName = "uid", insertable = false, updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User user;
     @ManyToOne
-    @JoinColumn(name = "bid", referencedColumnName = "bid", insertable = false, updatable = false)
+    @JoinColumn(name = "bid", referencedColumnName = "bid", insertable = false, updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Book book;
 
     @Column(name = "uid")
