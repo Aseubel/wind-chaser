@@ -18,7 +18,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
 
@@ -47,57 +52,61 @@ public class CacheAspect {
     private final IRedisService redisService;
     private final ObjectMapper objectMapper;
 
-    private static final String SET_SH =
-            "local key = KEYS[1]\n"
-                    + "local value = ARGV[1]\n"
-                    + "local owner = ARGV[2]\n"
-                    + "local lockOwner = redis.call('HGET', key, '" + OWNER + "')\n"
-                    + "local lockInfo = redis.call('HGET', key, '" + LOCK_INFO + "')\n"
-                    + "if lockOwner and lockOwner == owner then\n"
-                    + "    redis.call('HMSET', key, '" + LOCK_INFO + "', 'unlocked', '" + VALUE + "', value)\n"
-                    + "    redis.call('HDEL', key, '" + UNLOCK_TIME +"')"
-                    + "    return 0\n"
-                    + "end\n"
-                    + "return 1";
+//    private static final String SET_SH =
+//            "local key = KEYS[1]\n"
+//                    + "local value = ARGV[1]\n"
+//                    + "local owner = ARGV[2]\n"
+//                    + "local lockOwner = redis.call('HGET', key, '" + OWNER + "')\n"
+//                    + "local lockInfo = redis.call('HGET', key, '" + LOCK_INFO + "')\n"
+//                    + "if lockOwner and lockOwner == owner then\n"
+//                    + "    redis.call('HMSET', key, '" + LOCK_INFO + "', 'unlocked', '" + VALUE + "', value)\n"
+//                    + "    redis.call('HDEL', key, '" + UNLOCK_TIME +"')"
+//                    + "    return 0\n"
+//                    + "end\n"
+//                    + "return 1";
+//
+//    private static final String GET_SH =
+//            "local key = KEYS[1]\n"
+//                    + "local newUnlockTime = ARGV[1]\n"
+//                    + "local owner = ARGV[2]\n"
+//                    + "local currentTime = tonumber(ARGV[3])\n"
+//                    + "local value = redis.call('HGET', key, '" + VALUE + "')\n"
+//                    + "local unlockTime = redis.call('HGET', key, '" + UNLOCK_TIME + "')\n"
+//                    + "local lockOwner = redis.call('HGET', key, '" + OWNER + "')\n"
+//                    + "local lockInfo = redis.call('HGET', key, '" + LOCK_INFO + "')\n"
+//                    + "if unlockTime and currentTime > tonumber(unlockTime or 0) then\n"
+//                    + "    redis.call('HMSET', key, '" + LOCK_INFO + "', 'locked', '" + UNLOCK_TIME + "', newUnlockTime, '" + OWNER + "', owner)\n"
+//                    + "    return {value, '" + NEED_QUERY + "'}\n"
+//                    + "end\n"
+//                    + "if not value or value == '' then\n"
+//                    + "    if lockOwner and lockOwner ~= owner then\n"
+//                    + "        return {value, '" + NEED_WAIT + "'}\n"
+//                    + "    end\n"
+//                    + "    redis.call('HMSET', key, '" + LOCK_INFO + "', 'locked', '" + UNLOCK_TIME + "', newUnlockTime, '" + OWNER + "', owner)\n"
+//                    + "    return {value, '" + NEED_QUERY + "'}\n"
+//                    + "end\n"
+//                    + "if lockInfo and lockInfo == 'locked' then \n"
+//                    + "    return {value, '" + SUCCESS_NEED_QUERY + "'}\n"
+//                    + "end\n"
+//                    + "return {value , '" + SUCCESS + "'}";
+//
+//    private static final String INVALID_SH =
+//            "local key = KEYS[1]\n"
+//                    + "local newUnlockTime = tonumber(ARGV[1])\n"
+//                    + "redis.call('HDEL', key, '" + OWNER + "')\n"
+//                    + "local value = redis.call('HGET', key, '" + VALUE + "')\n"
+//                    + "redis.call('HSET', key, '" + LOCK_INFO + "', 'locked')\n"
+//                    + "if not value or value == '' then\n"
+//                    + "      return {true, '" + EMPTY_VALUE_SUCCESS + "'}\n"
+//                    + "end\n"
+//                    + "if newUnlockTime > 0 then\n"
+//                    + "      redis.call('HSET', key, '" + UNLOCK_TIME + "', newUnlockTime)\n"
+//                    + "end\n"
+//                    + "return {'', '" + SUCCESS + "'}";
 
-    private static final String GET_SH =
-            "local key = KEYS[1]\n"
-                    + "local newUnlockTime = ARGV[1]\n"
-                    + "local owner = ARGV[2]\n"
-                    + "local currentTime = tonumber(ARGV[3])\n"
-                    + "local value = redis.call('HGET', key, '" + VALUE + "')\n"
-                    + "local unlockTime = redis.call('HGET', key, '" + UNLOCK_TIME + "')\n"
-                    + "local lockOwner = redis.call('HGET', key, '" + OWNER + "')\n"
-                    + "local lockInfo = redis.call('HGET', key, '" + LOCK_INFO + "')\n"
-                    + "if unlockTime and currentTime > tonumber(unlockTime or 0) then\n"
-                    + "    redis.call('HMSET', key, '" + LOCK_INFO + "', 'locked', '" + UNLOCK_TIME + "', newUnlockTime, '" + OWNER + "', owner)\n"
-                    + "    return {value, '" + NEED_QUERY + "'}\n"
-                    + "end\n"
-                    + "if not value or value == '' then\n"
-                    + "    if lockOwner and lockOwner ~= owner then\n"
-                    + "        return {value, '" + NEED_WAIT + "'}\n"
-                    + "    end\n"
-                    + "    redis.call('HMSET', key, '" + LOCK_INFO + "', 'locked', '" + UNLOCK_TIME + "', newUnlockTime, '" + OWNER + "', owner)\n"
-                    + "    return {value, '" + NEED_QUERY + "'}\n"
-                    + "end\n"
-                    + "if lockInfo and lockInfo == 'locked' then \n"
-                    + "    return {value, '" + SUCCESS_NEED_QUERY + "'}\n"
-                    + "end\n"
-                    + "return {value , '" + SUCCESS + "'}";
-
-    private static final String INVALID_SH =
-            "local key = KEYS[1]\n"
-                    + "local newUnlockTime = tonumber(ARGV[1])\n"
-                    + "redis.call('HDEL', key, '" + OWNER + "')\n"
-                    + "local value = redis.call('HGET', key, '" + VALUE + "')\n"
-                    + "redis.call('HSET', key, '" + LOCK_INFO + "', 'locked')\n"
-                    + "if not value or value == '' then\n"
-                    + "      return {true, '" + EMPTY_VALUE_SUCCESS + "'}\n"
-                    + "end\n"
-                    + "if newUnlockTime > 0 then\n"
-                    + "      redis.call('HSET', key, '" + UNLOCK_TIME + "', newUnlockTime)\n"
-                    + "end\n"
-                    + "return {'', '" + SUCCESS + "'}";
+    private static final String SET_SH = loadScript("set.lua");
+    private static final String GET_SH = loadScript("get.lua");
+    private static final String INVALID_SH = loadScript("invalid.lua");
 
     private static final String SET_SH_SHA = DigestUtil.sha1Hex(SET_SH);
     private static final String GET_SH_SHA = DigestUtil.sha1Hex(GET_SH);
@@ -183,9 +192,22 @@ public class CacheAspect {
             }
             return value;
         } catch (Throwable e) {
+            // 释放缓存锁
+            redisService.execute(INVALID_SH_SHA, INVALID_SH, RScript.ReturnType.MULTI, List.of(key), System.currentTimeMillis() + lockTime);
             log.error("Failed to query data for cache key: {}", key, e);
             throw e;
         }
     }
 
+    private static String loadScript(String scriptName) {
+        try {
+            // 使用类路径加载Lua脚本文件
+            // 注意生产环境的话路径改为 lua/
+            Path path = Paths.get(CacheAspect.class.getClassLoader().getResource("lua\\" + scriptName).toURI());
+            return new String(Files.readAllBytes(path));
+        } catch (IOException | URISyntaxException e) {
+            log.error("Failed to load Lua script: {}", scriptName, e);
+            throw new RuntimeException(e);
+        }
+    }
 }
