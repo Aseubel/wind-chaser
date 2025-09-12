@@ -45,7 +45,7 @@ public class CacheAspect {
     private String keyPrefix;
     @Value("${spring.cache.redis.time-to-live:1s}")
     private Duration ttl;
-    private static final long lockTime = 1000;
+    private static final long lockTime = 1500;
 
     private final ThreadPoolTaskExecutor threadPoolExecutor;
     private final SpelResolverHelper spelResolverHelper;
