@@ -50,15 +50,15 @@ public class QueueTest {
     @Test
     public void priorityQueueTest() {
         // 由此可知queue默认小顶堆，且不是加入后自动排序
-        Queue<Integer> queue = new PriorityQueue<>();
-        List<Integer> list = new ArrayList<>();
+        Queue<Integer> queue = new PriorityQueue<>(Comparator.reverseOrder());
         genElements(queue);
         // 按照队列的顺序输出
-        list.addAll(queue);
-        queue.forEach(System.out::print);
+        List<Integer> list = new ArrayList<>(queue);
+        list.forEach(System.out::print);
         System.out.println();
 
         list.clear();
+        queue.clear();
 
         genElements(queue);
         // 取出按照优先队列的优先级顺序取出
