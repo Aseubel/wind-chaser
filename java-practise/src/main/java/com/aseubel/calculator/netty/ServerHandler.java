@@ -1,6 +1,6 @@
-package com.aseubel.netty;
+package com.aseubel.calculator.netty;
 
-import com.aseubel.Calculator;
+import com.aseubel.calculator.Calculator;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 

@@ -1,4 +1,4 @@
-package com.aseubel.netty;
+package com.aseubel.calculator.netty;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;

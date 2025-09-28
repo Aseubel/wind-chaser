@@ -1,4 +1,4 @@
-package com.aseubel.netty;
+package com.aseubel.calculator.netty;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

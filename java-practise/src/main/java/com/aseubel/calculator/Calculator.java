@@ -1,4 +1,4 @@
-package com.aseubel;
+package com.aseubel.calculator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
