@@ -14,5 +14,13 @@ public class ClassToInstanceMapTests {
         map.putInstance(Integer.class, 123);
         System.out.println(map.getInstance(String.class));
         System.out.println(map.getInstance(Integer.class));
+
+        ClassToInstanceMap<Object> instanceMap = MutableClassToInstanceMap.create();
+        instanceMap.putInstance(String.class, "Hello Guava");
+        instanceMap.putInstance(Integer.class, 2025);
+        // 获取类型实例
+        String str = instanceMap.getInstance(String.class);
+        Integer num = instanceMap.getInstance(Integer.class);
+        System.out.println(str + " - " + num);  // Hello Guava - 2025
     }
 }
