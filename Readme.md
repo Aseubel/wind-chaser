@@ -81,4 +81,4 @@
     - [ ] RabbitMQ
     - [ ] Kafka
     - [ ] RocketMQ
-    - [ ] Disruptor
+    - [x] Disruptor
